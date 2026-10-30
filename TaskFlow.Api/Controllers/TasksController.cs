@@ -1,3 +1,4 @@
+using TaskFlow.Api.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TaskFlow.Api.Data;
@@ -33,29 +34,34 @@ public class TasksController : ControllerBase
         return Ok(task);                                    // 200
     }
 
-    // POST /api/tasks → yeni görev
     [HttpPost]
-    public async Task<IActionResult> Create(TaskItem task)
+    public async Task<IActionResult> Create(SaveTaskDto dto)
     {
+        // DTO'dan entity'yi biz oluşturuyoruz; hangi alanın kopyalanacağına biz karar veriyoruz
+        var task = new TaskItem
+        {
+            Title = dto.Title,
+            Status = dto.Status,
+            DueDate = dto.DueDate
+        };
+
         _db.Tasks.Add(task);
-        await _db.SaveChangesAsync();                       // Asıl INSERT burada olur
-        return CreatedAtAction(nameof(GetById), new { id = task.Id }, task);  // 201
+        await _db.SaveChangesAsync();
+        return CreatedAtAction(nameof(GetById), new { id = task.Id }, task);
     }
 
-    // PUT /api/tasks/5 → görevi güncelle
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(int id, TaskItem updated)
+    public async Task<IActionResult> Update(int id, SaveTaskDto dto)
     {
         var task = await _db.Tasks.FindAsync(id);
-        if (task == null) return NotFound();                // 404
+        if (task == null) return NotFound();
 
-        task.Title = updated.Title;
-        task.Status = updated.Status;
-        task.DueDate = updated.DueDate;
-        await _db.SaveChangesAsync();                       // UPDATE
-        return NoContent();                                 // 204
+        task.Title = dto.Title;
+        task.Status = dto.Status;
+        task.DueDate = dto.DueDate;
+        await _db.SaveChangesAsync();
+        return NoContent();
     }
-
     // DELETE /api/tasks/5 → görevi sil
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
