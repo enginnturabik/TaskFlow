@@ -480,3 +480,8 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+
+# SQLite veritabanı dosyaları: veri koda dahil değildir, her geliştirici kendi veritabanını migration ile kurar
+*.db
+*.db-shm
+*.db-wal

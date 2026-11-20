@@ -1,111 +1,307 @@
+/* =====================================================================
+   index.css — Uygulamanın tüm stili.
+   CSS DEĞİŞKENLERİ (custom properties): Renkler tek yerde tanımlanır,
+   her yerde var(--...) ile kullanılır. Koyu tema için sadece değişkenler değişir.
+   ===================================================================== */
+
 :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+  --bg: #f4f2ee;
+  --surface: #ffffff;
+  --text: #1d1b19;
+  --muted: #6f6a64;
+  --border: #e3dfd8;
+  --accent: #2f5d50;
+  --accent-text: #ffffff;
+  --accent-soft: #e3ece8;
+  --danger: #b3412f;
+  --danger-soft: #f8e6e2;
+  --warn: #a86512;
+  --radius: 10px;
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
-
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
+  font-family: system-ui, "Segoe UI", Roboto, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
   color: var(--text);
   background: var(--bg);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  color-scheme: light;
+}
 
-  @media (max-width: 1024px) {
-    font-size: 16px;
+/* İşletim sistemi koyu temadaysa değişkenleri değiştir; bileşenlere dokunmaya gerek yok. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #171615;
+    --surface: #211f1d;
+    --text: #ece8e2;
+    --muted: #a19b93;
+    --border: #36322e;
+    --accent: #7fb8a6;
+    --accent-text: #10201b;
+    --accent-soft: #23332d;
+    --danger: #e58a78;
+    --danger-soft: #3a2420;
+    --warn: #e0a85c;
+    color-scheme: dark;
   }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-  }
-
-  #social .button-icon {
-    filter: invert(1) brightness(2);
-  }
+/* BOX MODEL: width artık padding ve border'ı da kapsar. Neredeyse her projenin ilk kuralı. */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
 body {
   margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
 }
 
-#root {
-  width: 1126px;
-  max-width: 100%;
+/* Sayfayı ortalayan dış kap. Telefonda yanlarda 16px boşluk kalır. */
+.app {
+  max-width: 720px;
   margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
+  padding: 48px 16px;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px;
+}
+
+.auth-card {
+  max-width: 400px;
+  margin: 40px auto 0;
+}
+
+.brand {
+  margin: 0;
+  font-size: 1.6rem;
+  letter-spacing: -0.02em;
+}
+
+.muted {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+/* FLEXBOX: tek eksende dizmek için. "stack" = elemanları alt alta, aralarında sabit boşluk. */
+.stack {
   display: flex;
   flex-direction: column;
-  box-sizing: border-box;
+  gap: 8px;
+  margin-top: 20px;
 }
 
-h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
+label {
+  font-size: 0.9rem;
+  font-weight: 600;
 }
 
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
-  }
+input,
+select {
+  font: inherit;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 9px 11px;
+  min-width: 0; /* flex içinde input'un taşmasını önler */
 }
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
-  }
+
+/* :focus-visible: Klavyeyle gezinen kullanıcı nerede olduğunu görsün (erişilebilirlik). */
+input:focus-visible,
+select:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
-p {
+
+button {
+  font: inherit;
+  cursor: pointer;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 9px 16px;
+  background: transparent;
+  color: var(--text);
+}
+
+button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.primary {
+  background: var(--accent);
+  color: var(--accent-text);
+  font-weight: 600;
+}
+
+.ghost {
+  border-color: var(--border);
+}
+
+.danger {
+  color: var(--danger);
+  padding: 7px 12px;
+}
+
+.danger:hover:not(:disabled) {
+  background: var(--danger-soft);
+}
+
+.link {
+  margin-top: 16px;
+  padding: 0;
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+.field-error {
   margin: 0;
+  color: var(--danger);
+  font-size: 0.9rem;
 }
 
-code,
-.counter {
-  font-family: var(--mono);
-  display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
+.alert {
+  margin: 12px 0 0;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: var(--danger-soft);
+  color: var(--danger);
 }
 
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
+/* Görev sayfası başlığı: solda isim, sağda çıkış butonu. */
+.page-header {
+  display: flex;
+  justify-content: space-between; /* ana eksen (yatay) */
+  align-items: flex-start;        /* çapraz eksen (dikey) */
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.add-form {
+  margin-bottom: 20px;
+}
+
+.add-row {
+  display: flex;
+  gap: 8px;
+}
+
+.add-row input:first-child {
+  flex: 1; /* başlık kutusu kalan tüm genişliği alsın */
+}
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap; /* dar ekranda alt satıra insin */
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.chip {
+  padding: 5px 12px;
+  border-color: var(--border);
+  border-radius: 999px;
+  font-size: 0.9rem;
+}
+
+.chip--active {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.task-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--border);
+}
+
+.task {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.task-main {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.task-title {
+  overflow-wrap: anywhere; /* çok uzun kelimeler kartı taşırmasın */
+}
+
+.task-date {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.task-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+/* Durum sınıfları: Karar JSX'te (TaskCard), görünüm burada. */
+.task--done .task-title {
+  color: var(--muted);
+  text-decoration: line-through;
+}
+
+.task--overdue .task-date {
+  color: var(--warn);
+  font-weight: 600;
+}
+
+.task--busy {
+  opacity: 0.6;
+}
+
+.empty {
+  padding: 32px 0;
+  text-align: center;
+  color: var(--muted);
+}
+
+/* RESPONSIVE: Dar ekranda (telefon) satırları alt alta diz. */
+@media (max-width: 560px) {
+  .app {
+    padding: 24px 16px;
+  }
+
+  .card {
+    padding: 20px;
+  }
+
+  .add-row,
+  .task {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .task-actions {
+    justify-content: space-between;
+  }
 }
